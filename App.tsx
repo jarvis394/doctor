@@ -1,24 +1,44 @@
+import React, { useCallback } from 'react'
+import { Provider as StoreProvider } from 'react-redux'
+import { PaperProvider } from 'react-native-paper'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useGoogleFonts } from '@hooks/useGoogleFonts'
+import * as SplashScreen from 'expo-splash-screen'
+import { StatusBar } from 'expo-status-bar'
+import * as NavigationBar from 'expo-navigation-bar'
+import Routes from '@routes'
+
 import 'react-native-gesture-handler'
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { HomeScreen, DetailsScreen } from './pages'
-import {CustomNavigationBar} from './components'
+import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 
-const Stack = createStackNavigator()
+SplashScreen.preventAutoHideAsync()
 
-export default function App() {
+const App: React.FC = () => {
+  const theme = useAdaptiveTheme()
+  const [fontsLoaded, fontError] = useGoogleFonts()
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync()
+      await NavigationBar.setPositionAsync('absolute')
+      await NavigationBar.setBackgroundColorAsync(theme.colors.elevation.level2)
+    }
+  }, [fontsLoaded, fontError])
+
+  if (!fontsLoaded && !fontError) {
+    return null
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName='Home'
-        screenOptions={{
-          header: (props) => <CustomNavigationBar {...props} />,
-        }}
-      >
-        <Stack.Screen name='Home' component={HomeScreen} />
-        <Stack.Screen name='Details' component={DetailsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider onLayout={onLayoutRootView}>
+      {/* <StoreProvider store={store}> */}
+      <PaperProvider theme={theme}>
+        <StatusBar style="light" />
+        <Routes />
+      </PaperProvider>
+      {/* </StoreProvider> */}
+    </SafeAreaProvider>
   )
 }
+
+export default App
