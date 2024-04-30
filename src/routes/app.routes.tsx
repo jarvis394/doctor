@@ -1,27 +1,59 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
 import * as Screens from '@screens'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import {
+  createMaterialBottomTabNavigator,
+  MaterialBottomTabScreenProps,
+} from '@react-navigation/material-bottom-tabs'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { CompositeScreenProps } from '@react-navigation/native'
+import { StackNavigationProps } from '@routes'
 
-export type RootStackParamList = {
+export type BottomTabParamList = {
   MainScreen: undefined
   AssistantScreen: undefined
 }
 
-export type NavigationProps<Screen extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, Screen>
+export type BottomTabNavigationProps<
+  Screen extends keyof BottomTabParamList | never = never,
+> = CompositeScreenProps<
+  MaterialBottomTabScreenProps<BottomTabParamList, Screen>,
+  StackNavigationProps
+>
 
-const Stack = createStackNavigator<RootStackParamList>()
+const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
 const AppRoutes: React.FC = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MainScreen" component={Screens.MainScreen} />
-      <Stack.Screen
+    <Tab.Navigator>
+      <Tab.Screen
+        name="MainScreen"
+        options={{
+          tabBarLabel: 'Здоровье',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialIcons
+              name={focused ? 'favorite' : 'favorite-outline'}
+              color={color}
+              size={24}
+            />
+          ),
+        }}
+        component={Screens.MainScreen}
+      />
+      <Tab.Screen
         name="AssistantScreen"
+        options={{
+          tabBarLabel: 'Ассистент',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialIcons
+              name={focused ? 'chat-bubble' : 'chat-bubble-outline'}
+              color={color}
+              size={24}
+            />
+          ),
+        }}
         component={Screens.AssistantScreen}
       />
-    </Stack.Navigator>
+    </Tab.Navigator>
   )
 }
 

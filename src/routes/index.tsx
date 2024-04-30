@@ -1,10 +1,25 @@
 import React from 'react'
+import * as Screens from '@screens'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
 import AppRoutes from './app.routes'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack'
 
-const Stack = createStackNavigator()
+export type RootStackParamList = {
+  App: undefined
+  AppointmentScreen: {
+    id: string
+  }
+}
+
+export type StackNavigationProps<
+  Screen extends keyof RootStackParamList | never = never,
+> = NativeStackScreenProps<RootStackParamList, Screen>
+
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const Routes: React.FC = () => {
   const theme = useAdaptiveTheme()
@@ -12,10 +27,17 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="AppRoutes"
-        screenOptions={{ headerShown: false }}
+        initialRouteName="App"
+        screenOptions={({ route }) => ({
+          headerShown: route.name !== 'App',
+        })}
       >
-        <Stack.Screen name="AppRoutes" component={AppRoutes} />
+        <Stack.Screen name="App" component={AppRoutes} />
+        <Stack.Screen
+          name="AppointmentScreen"
+          options={{ headerTitle: 'Посещение' }}
+          component={Screens.AppointmentScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

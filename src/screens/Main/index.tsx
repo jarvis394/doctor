@@ -1,42 +1,47 @@
 import React from 'react'
-import { View } from 'react-native'
-import { Button, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { NavigationProps } from '@routes/app.routes'
+import { BottomTabNavigationProps } from '@routes/app.routes'
+import styled from '@emotion/native'
+import { AppointmentCard } from '@components/AppointmentCard'
+import Section from '@components/Section'
+import { Text } from 'react-native-paper'
+import { ScrollView } from 'react-native'
 
-const MainScreen: React.FC<NavigationProps<'MainScreen'>> = ({
-  navigation,
-}) => {
+const Root = styled(ScrollView)({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 12,
+  maxHeight: '100%',
+  flex: 1,
+  paddingBottom: 16,
+})
+
+const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = () => {
   return (
-    <SafeAreaView>
-      <View
-        style={{
-          padding: 16,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-        }}
-      >
-        <Button
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
+      <Root>
+        <Section title="Действия">
+          <Text variant="bodyLarge">TODO</Text>
+        </Section>
+        <Section
           onPress={() => {
-            navigation.push('AssistantScreen')
+            console.log('AppointmentsScreen')
           }}
-          mode="contained"
-          contentStyle={{
-            height: 52,
-          }}
-          labelStyle={{
-            fontSize: 16,
-            fontFamily: 'GoogleSans-Medium',
-          }}
-          style={{
-            borderRadius: 24,
-          }}
+          title="Предстоящие визиты"
         >
-          Сохранить
-        </Button>
-        <Text variant="labelMedium">hello world!</Text>
-      </View>
+          <AppointmentCard />
+          <AppointmentCard />
+          <AppointmentCard />
+          <AppointmentCard />
+          <AppointmentCard />
+          <AppointmentCard />
+          <AppointmentCard />
+        </Section>
+      </Root>
     </SafeAreaView>
   )
 }

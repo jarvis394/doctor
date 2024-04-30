@@ -1,10 +1,10 @@
 import { MD3DarkTheme as PaperDarkTheme, MD3Theme } from 'react-native-paper'
 import {
   DarkTheme as NavigationDarkTheme,
-  Theme,
+  Theme as NavigationTheme,
 } from '@react-navigation/native'
 
-export const theme: Theme & MD3Theme = {
+export const theme: NavigationTheme & MD3Theme = {
   ...NavigationDarkTheme,
   ...PaperDarkTheme,
   mode: 'exact',
@@ -171,3 +171,8 @@ export const theme: Theme & MD3Theme = {
     backdrop: 'rgba(47, 48, 56, 0.4)',
   },
 } as const
+
+declare module '@emotion/react' {
+  type CustomTheme = typeof theme
+  export interface Theme extends CustomTheme {}
+}

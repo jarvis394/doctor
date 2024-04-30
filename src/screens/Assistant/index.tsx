@@ -1,12 +1,13 @@
-import { NavigationProps } from '@routes/app.routes'
+import { Button } from '@components/Button'
+import { BottomTabNavigationProps } from '@routes/app.routes'
 import React from 'react'
 import { View } from 'react-native'
-import { Button, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const AssistantScreen: React.FC<NavigationProps<'AssistantScreen'>> = ({
-  navigation,
-}) => {
+const AssistantScreen: React.FC<
+  BottomTabNavigationProps<'AssistantScreen'>
+> = ({ navigation }) => {
   return (
     <SafeAreaView>
       <View
@@ -19,23 +20,12 @@ const AssistantScreen: React.FC<NavigationProps<'AssistantScreen'>> = ({
       >
         <Button
           onPress={() => {
-            navigation.push('MainScreen')
-          }}
-          mode="contained"
-          contentStyle={{
-            height: 52,
-          }}
-          labelStyle={{
-            fontSize: 16,
-            fontFamily: 'GoogleSans-Medium',
-          }}
-          style={{
-            borderRadius: 24,
+            navigation.jumpTo('MainScreen')
           }}
         >
-          Сохранить
+          На MainScreen
         </Button>
-        <Text variant="labelMedium">AssistantScreen</Text>
+        <Text variant="bodyLarge">AssistantScreen</Text>
       </View>
     </SafeAreaView>
   )
