@@ -1,8 +1,9 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
-const { getDefaultConfig } = require("@expo/metro-config");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { getDefaultConfig } = require('@expo/metro-config')
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname);
+const config = getDefaultConfig(__dirname)
 
 config.transformer = {
   ...config.transformer,
@@ -14,12 +15,12 @@ config.transformer = {
       inlineRequires: true,
     },
   }),
-};
+}
 
 config.resolver = {
   ...config.resolver,
   assetExts: config.resolver.assetExts.filter((ext) => ext !== 'svg'),
   sourceExts: [...config.resolver.sourceExts, 'svg', 'd.ts'],
-};
+}
 
-module.exports = config;
+module.exports = config
