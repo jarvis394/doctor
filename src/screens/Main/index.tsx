@@ -4,8 +4,11 @@ import { BottomTabNavigationProps } from '@routes/app.routes'
 import styled from '@emotion/native'
 import { AppointmentCard } from '@components/AppointmentCard'
 import Section from '@components/Section'
-import { Text } from 'react-native-paper'
 import { ScrollView } from 'react-native'
+import { ActionButton } from '@components/ActionButton'
+import AddVisitIcon from '@assets/icons/AddVisit'
+import MedicalInformationIcon from '@assets/icons/Medicalnformation'
+import TipsAndUpdatesIcon from '@assets/icons/TipsAndUpdates'
 
 const Root = styled(ScrollView)({
   display: 'flex',
@@ -16,6 +19,12 @@ const Root = styled(ScrollView)({
   paddingBottom: 16,
 })
 
+const ButtonGrid = styled.View`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+`
+
 const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = () => {
   return (
     <SafeAreaView
@@ -25,7 +34,32 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = () => {
     >
       <Root>
         <Section title="Действия">
-          <Text variant="bodyLarge">TODO</Text>
+          <ButtonGrid>
+            <ActionButton
+              onPress={() => {
+                console.log('active')
+              }}
+            >
+              <AddVisitIcon />
+              <div>Добавить посещение</div>
+            </ActionButton>
+            <ActionButton
+              onPress={() => {
+                console.log('active')
+              }}
+            >
+              <TipsAndUpdatesIcon />
+              <div>Помощь AI-асистента</div>
+            </ActionButton>
+            <ActionButton
+              onPress={() => {
+                console.log('active')
+              }}
+            >
+              <MedicalInformationIcon />
+              <div> Карточки врачей</div>
+            </ActionButton>
+          </ButtonGrid>
         </Section>
         <Section
           onPress={() => {
