@@ -10,6 +10,8 @@ import {
 
 export type RootStackParamList = {
   App: undefined
+  RegisterScreen: undefined
+  LoginScreen: undefined
   AppointmentScreen: {
     id: string
   }
@@ -27,7 +29,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="App"
+        initialRouteName="LoginScreen"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
         })}
@@ -37,6 +39,16 @@ const Routes: React.FC = () => {
           name="AppointmentScreen"
           options={{ headerTitle: 'Посещение' }}
           component={Screens.AppointmentScreen}
+        />
+        <Stack.Screen
+          name="LoginScreen"
+          options={{ headerShown: false }}
+          component={Screens.LoginScreen}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          options={{ headerShown: false }}
+          component={Screens.RegisterScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

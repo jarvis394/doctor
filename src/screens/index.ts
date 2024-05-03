@@ -1,3 +1,5 @@
 export { default as MainScreen } from './Main'
 export { default as AssistantScreen } from './Assistant'
 export { default as AppointmentScreen } from './Appointment'
+export { default as LoginScreen } from './Auth/Login'
+export { default as RegisterScreen } from './Auth/Register'
