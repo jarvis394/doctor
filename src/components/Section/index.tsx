@@ -41,7 +41,7 @@ const IconContainer = styled.View({
 })
 
 type SectionProps = React.PropsWithChildren<{
-  title: string
+  title?: string
   onPress?: () => void
 }>
 
@@ -53,7 +53,7 @@ const Section: React.FC<SectionProps> = ({ title, onPress, children }) => {
     <Root>
       <Header onPress={onPress}>
         <>
-          <HeaderTitle>{title}</HeaderTitle>
+          {title && <HeaderTitle>{title}</HeaderTitle>}
           {onPress && (
             <IconContainer>
               <MaterialIcons

@@ -13,6 +13,9 @@ export type RootStackParamList = {
   AppointmentScreen: {
     id: string
   }
+  AddAppointmentScreen: {
+    id: string
+  }
 }
 
 export type StackNavigationProps<
@@ -27,7 +30,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="App"
+        initialRouteName="AddAppointmentScreen"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
         })}
@@ -37,6 +40,11 @@ const Routes: React.FC = () => {
           name="AppointmentScreen"
           options={{ headerTitle: 'Посещение' }}
           component={Screens.AppointmentScreen}
+        />
+        <Stack.Screen
+          name="AddAppointmentScreen"
+          options={{ headerTitle: 'Добавить посещение', headerShown: false }}
+          component={Screens.AddAppointmentScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
