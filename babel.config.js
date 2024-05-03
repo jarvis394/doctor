@@ -1,7 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 
 module.exports = function (api) {
-  api.cache(true);
+  api.cache(true)
   return {
     presets: ['babel-preset-expo'],
     env: {
@@ -40,5 +41,5 @@ module.exports = function (api) {
         },
       ],
     ],
-  };
-};
+  }
+}
