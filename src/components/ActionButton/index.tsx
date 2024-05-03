@@ -20,6 +20,8 @@ export const ActionButton: React.FC<ButtonProps> = ({
         ...(typeof labelStyle === 'object' && { ...labelStyle }),
         fontSize: 16,
         fontFamily: 'GoogleSans-Medium',
+        whiteSpace: 'none',
+        textAlign: 'left',
       }}
       style={{
         ...(typeof style === 'object' && { ...style }),
@@ -30,7 +32,7 @@ export const ActionButton: React.FC<ButtonProps> = ({
       <div
         style={{
           display: 'flex',
-          flexWrap: 'wrap',
+
           flexDirection: 'column',
           justifyContent: 'flex-start',
           alignItems: 'space-between',
