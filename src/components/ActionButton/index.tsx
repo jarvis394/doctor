@@ -20,7 +20,7 @@ export const ActionButton: React.FC<ButtonProps> = ({
         ...(typeof labelStyle === 'object' && { ...labelStyle }),
         fontSize: 16,
         fontFamily: 'GoogleSans-Medium',
-        whiteSpace: 'none',
+        whiteSpace: 'pre-wrap',
         textAlign: 'left',
       }}
       style={{
