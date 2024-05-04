@@ -1,31 +1,26 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button } from '@components/Button'
 import styled from '@emotion/native'
 import { StackNavigationProps } from '@routes'
+import Screen from '@components/Screen'
 
-const Root = styled.View({
+const Root = styled(Screen)({
   padding: 16,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 16,
 })
 
 const AppointmentScreen: React.FC<
   StackNavigationProps<'AppointmentScreen'>
 > = ({ navigation }) => {
   return (
-    <SafeAreaView>
-      <Root>
-        <Button
-          onPress={() => {
-            navigation.popToTop()
-          }}
-        >
-          Назад
-        </Button>
-      </Root>
-    </SafeAreaView>
+    <Root>
+      <Button
+        onPress={() => {
+          navigation.popToTop()
+        }}
+      >
+        Назад
+      </Button>
+    </Root>
   )
 }
 

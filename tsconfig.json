@@ -14,7 +14,8 @@
       "@screens/*": ["./screens/*"],
       "@screens": ["./screens"],
       "@store/*": ["./store/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "src/types/*": ["./types/*"]
     }
   }
 }
