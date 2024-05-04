@@ -7,6 +7,8 @@ import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 
 export type RootStackParamList = {
   App: undefined
+  LoginScreen: undefined
+  RegisterScreen: undefined
   AppointmentScreen: {
     id: string
   }
@@ -34,12 +36,15 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="App"
+        initialRouteName="RegisterScreen"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
           headerTitleStyle: {
             fontFamily: 'GoogleSans-Medium',
             fontSize: 20,
+          },
+          headerStyle: {
+            backgroundColor: theme.colors.background,
           },
         })}
       >
@@ -58,6 +63,19 @@ const Routes: React.FC = () => {
           name="AssistantChatScreen"
           options={{ headerTitle: 'Чат' }}
           component={Screens.AssistantChatScreen}
+        />
+        <Stack.Screen
+          name="LoginScreen"
+          options={{
+            headerShown: true,
+            headerTitle: 'Вход в аккаунт',
+          }}
+          component={Screens.LoginScreen}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          options={{ headerShown: false }}
+          component={Screens.RegisterScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

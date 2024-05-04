@@ -6,7 +6,6 @@ import FeatherIcons from 'react-native-vector-icons/Feather'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import { useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
-import { View } from 'react-native'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
