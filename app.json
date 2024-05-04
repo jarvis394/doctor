@@ -16,20 +16,32 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jarvis394.dentistapp"
+      "bundleIdentifier": "com.jarvis394.dentistapp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.jarvis394.dentistapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ]
   }
 }
