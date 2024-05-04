@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 // import { Provider as StoreProvider } from 'react-redux'
 import { PaperProvider } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -9,14 +9,23 @@ import * as NavigationBar from 'expo-navigation-bar'
 import { ThemeProvider } from '@emotion/react'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import Routes from '@routes'
+import tinycolor from 'tinycolor2'
+import dayjs from 'dayjs'
 
+import 'dayjs/locale/ru'
 import 'react-native-gesture-handler'
 
 SplashScreen.preventAutoHideAsync()
 
+dayjs.locale('ru')
+
 const App: React.FC = () => {
   const theme = useAdaptiveTheme()
   const [fontsLoaded, fontError] = useGoogleFonts()
+  const statusBarColor = useMemo(
+    () => tinycolor(theme.colors.surface).setAlpha(0.75).toRgbString(),
+    [theme.colors.surface]
+  )
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded || fontError) {
@@ -35,7 +44,11 @@ const App: React.FC = () => {
       {/* <StoreProvider store={store}> */}
       <PaperProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <StatusBar style="light" />
+          <StatusBar
+            translucent
+            backgroundColor={statusBarColor}
+            style="light"
+          />
           <Routes />
         </ThemeProvider>
       </PaperProvider>

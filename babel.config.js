@@ -37,6 +37,7 @@ module.exports = function (api) {
             '@screens': path.join(__dirname, 'src', 'screens'),
             '@store': path.join(__dirname, 'src', 'store'),
             '@utils': path.join(__dirname, 'src', 'utils'),
+            '@types': path.join(__dirname, 'src', 'types'),
           },
         },
       ],

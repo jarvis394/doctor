@@ -14,6 +14,7 @@ const Root = styled.View({
 const TouchableHeader = styled(TouchableRipple)({
   display: 'flex',
   flexDirection: 'row',
+  flex: 1,
 })
 
 const HeaderTitle = styled(Text)({
@@ -21,6 +22,7 @@ const HeaderTitle = styled(Text)({
   fontFamily: 'GoogleSans-Medium',
   lineHeight: 31,
   flexGrow: 1,
+  flexDirection: 'row',
   paddingTop: 16,
   paddingLeft: 16,
   userSelect: 'none',

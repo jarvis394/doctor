@@ -7,6 +7,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { CompositeScreenProps } from '@react-navigation/native'
 import { StackNavigationProps } from '@routes'
+import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 
 export type BottomTabParamList = {
   MainScreen: undefined
@@ -23,8 +24,10 @@ export type BottomTabNavigationProps<
 const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
 const AppRoutes: React.FC = () => {
+  const theme = useAdaptiveTheme()
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator theme={theme}>
       <Tab.Screen
         name="MainScreen"
         options={{
