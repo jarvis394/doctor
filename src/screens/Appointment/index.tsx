@@ -12,7 +12,7 @@ const AppointmentScreen: React.FC<
   StackNavigationProps<'AppointmentScreen'>
 > = ({ navigation }) => {
   return (
-    <Root>
+    <Root safeAreaProps={{ edges: ['left', 'right', 'bottom'] }}>
       <Button
         onPress={() => {
           navigation.popToTop()

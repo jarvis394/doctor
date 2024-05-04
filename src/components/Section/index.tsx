@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/native'
 import { Text, TouchableRipple } from 'react-native-paper'
-import { View } from 'react-native'
+import { View, ViewProps } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 
@@ -45,15 +45,21 @@ const IconContainer = styled.View({
 type SectionProps = React.PropsWithChildren<{
   title?: string
   onPress?: () => void
+  contentProps?: ViewProps
 }>
 
-const Section: React.FC<SectionProps> = ({ title, onPress, children }) => {
+const Section: React.FC<SectionProps> = ({
+  title,
+  onPress,
+  contentProps,
+  children,
+}) => {
   const Header = onPress ? TouchableHeader : View
   const theme = useAdaptiveTheme()
 
   return (
     <Root>
-      <Header onPress={onPress}>
+      <Header borderless onPress={onPress}>
         <>
           {title && <HeaderTitle>{title}</HeaderTitle>}
           {onPress && (
@@ -67,7 +73,7 @@ const Section: React.FC<SectionProps> = ({ title, onPress, children }) => {
           )}
         </>
       </Header>
-      <Content>{children}</Content>
+      <Content {...contentProps}>{children}</Content>
     </Root>
   )
 }

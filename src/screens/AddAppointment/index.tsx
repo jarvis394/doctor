@@ -1,52 +1,69 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import styled from '@emotion/native'
-import { Appbar } from 'react-native-paper'
-import { ScrollView } from 'react-native'
-import Searchbar from '@components/Searchbar'
 import { DoctorCard } from '@components/DoctorCard'
 import { StackNavigationProps } from '@routes'
 import { Button } from '@components/Button'
 import Section from '@components/Section'
-import Tags from '@components/Tags'
+import Screen from '@components/Screen'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { Text } from 'react-native-paper'
+import Input from '@components/Input'
+import styled from '@emotion/native'
 
-const Root = styled(ScrollView)({
+const TagsContainer = styled.View({
   display: 'flex',
-  flexDirection: 'column',
-  gap: 12,
-  maxHeight: '100%',
-  flex: 1,
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: 8,
+})
+
+const TagContainer = styled.View(({ theme }) => ({
+  backgroundColor: theme.colors.card,
+  paddingHorizontal: 20,
+  paddingVertical: 10,
+  borderRadius: 100,
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
+
+const TagText = styled.Text({
+  color: '#fff',
 })
 
 const AddAppointmentScreen: React.FC<
   StackNavigationProps<'AddAppointmentScreen'>
 > = () => {
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#000',
-      }}
+    <Screen
+      safeAreaProps={{ edges: ['left', 'right', 'bottom'], style: { gap: 12 } }}
     >
-      <Root>
-        <Appbar.Header style={{ backgroundColor: '#000' }}>
-          <Appbar.BackAction />
-          <Appbar.Content title="Добавить посещение" />
-        </Appbar.Header>
-        <Section>
-          <Searchbar title={'Название посещения'} />
-          <DoctorCard />
-          <Button style={{ opacity: 0.7 }}>Выбор врача</Button>
-        </Section>
-        <Section title="Теги">
-          <Tags />
-        </Section>
-        <Section title="Время и место">
-          <Searchbar title={'Название места'} />
-          <div>Выбор времени</div>
-        </Section>
-      </Root>
-    </SafeAreaView>
+      <Section>
+        <Input placeholder={'Название посещения'} />
+        <DoctorCard />
+        <Button
+          mode="contained-tonal"
+          icon={(props) => <MaterialIcons {...props} size={20} name="person" />}
+        >
+          Выбор врача
+        </Button>
+      </Section>
+      <Section title="Теги">
+        <TagsContainer>
+          <TagContainer>
+            <TagText>Повторяющееся</TagText>
+          </TagContainer>
+          <TagContainer>
+            <TagText>Визит</TagText>
+          </TagContainer>
+          <TagContainer>
+            <TagText>Консультация</TagText>
+          </TagContainer>
+        </TagsContainer>
+      </Section>
+      <Section title="Время и место">
+        <Input placeholder={'Название места'} />
+        <Text>Выбор времени</Text>
+      </Section>
+    </Screen>
   )
 }
 

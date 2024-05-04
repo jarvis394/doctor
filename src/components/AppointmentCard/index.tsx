@@ -6,6 +6,7 @@ import FeatherIcons from 'react-native-vector-icons/Feather'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import { useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
+import { View } from 'react-native'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
@@ -85,11 +86,11 @@ const AppointmentCardUnmemoized: React.FC = () => {
   const navigation = useNavigation<BottomTabNavigationProps['navigation']>()
 
   const handlePress = () => {
-    navigation.push('AppointmentScreen', { id: '1' })
+    navigation.push('AddAppointmentScreen', { id: '1' })
   }
 
   return (
-    <Root onPress={handlePress}>
+    <Root borderless onPress={handlePress}>
       <>
         <Content elevation={2} mode="flat">
           <InfoContainer>

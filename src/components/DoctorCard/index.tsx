@@ -6,6 +6,7 @@ import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import { useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { View } from 'react-native'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
@@ -22,7 +23,6 @@ const Content = styled(Surface)({
   justifyContent: 'space-between',
   paddingVertical: 14,
   paddingHorizontal: 16,
-  backgroundColor: '#1F1F1F',
 })
 
 const Avatar = styled.Image({
@@ -39,14 +39,13 @@ const TitleContainer = styled(Surface)({
   justifyContent: 'center',
   padding: 8,
   gap: 6,
-  backgroundColor: '#171717',
 })
 
 const Title = styled(Text)({
   fontSize: 13,
   fontWeight: '500',
   fontFamily: 'GoogleSans-Medium',
-  lineHeight: 25,
+  lineHeight: 18,
   opacity: 0.63,
 })
 
@@ -66,9 +65,8 @@ const ListContainer = styled.View({
 const Name = styled(Text)({
   fontSize: 20,
   fontWeight: '400',
-  maxWidth: '80%',
-  wordWrap: 'break-word',
-  fontFamily: 'GoogleSans-Regular',
+  flexShrink: 1,
+  fontFamily: 'GoogleSans-Medium',
   lineHeight: 25,
 })
 
@@ -111,7 +109,7 @@ const DoctorCardUnmemoized: React.FC = () => {
   }
 
   return (
-    <Root onPress={handlePress}>
+    <Root borderless onPress={handlePress}>
       <>
         <TitleContainer elevation={1} mode="flat">
           <Title>Карточка врача</Title>
@@ -119,7 +117,7 @@ const DoctorCardUnmemoized: React.FC = () => {
         <Content elevation={2} mode="flat">
           <InfoContainer>
             <Avatar />
-            <div
+            <View
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -127,7 +125,7 @@ const DoctorCardUnmemoized: React.FC = () => {
             >
               <Name>Небудчикова Елизавета Николаевна</Name>
               <JobTitle>Стоматолог-терапевт</JobTitle>
-            </div>
+            </View>
             <ListContainer>
               <ListItem>
                 <FeatherIcons
