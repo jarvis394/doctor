@@ -7764,6 +7764,11 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-material-datetime-picker@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-material-datetime-picker/-/react-native-material-datetime-picker-0.2.1.tgz#7089fd4001a1a2487da1374a499d873d2bc69de6"
+  integrity sha512-mSb6bOMjBlHUVwjm2jyV+TJa3+6OKCvRMjYpvUrWNBQaEzdUHwKN5ayXdZ1Rw3HmzoU9qe98LAfF8nHS89GwYA==
+
 react-native-paper@^5.12.3:
   version "5.12.3"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.12.3.tgz#d583119722ebbfbb7fe40400181d63748cca3683"

@@ -117,7 +117,7 @@ const ChatCardUnmemoized: React.FC<ChatCardProps> = ({ chat }) => {
   }
 
   return (
-    <Root onPress={handlePress}>
+    <Root borderless onPress={handlePress}>
       <>
         <Header elevation={2} mode="flat">
           <Title>{timestampText}</Title>

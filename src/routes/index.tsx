@@ -10,6 +10,7 @@ export type RootStackParamList = {
   AppointmentScreen: {
     id: string
   }
+  AddAppointmentScreen: undefined
   AssistantChatScreen:
     | {
         id: string
@@ -36,6 +37,10 @@ const Routes: React.FC = () => {
         initialRouteName="App"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
+          headerTitleStyle: {
+            fontFamily: 'GoogleSans-Medium',
+            fontSize: 20,
+          },
         })}
       >
         <Stack.Screen name="App" component={AppRoutes} />
@@ -43,6 +48,11 @@ const Routes: React.FC = () => {
           name="AppointmentScreen"
           options={{ headerTitle: 'Посещение' }}
           component={Screens.AppointmentScreen}
+        />
+        <Stack.Screen
+          name="AddAppointmentScreen"
+          options={{ headerTitle: 'Добавить посещение' }}
+          component={Screens.AddAppointmentScreen}
         />
         <Stack.Screen
           name="AssistantChatScreen"
