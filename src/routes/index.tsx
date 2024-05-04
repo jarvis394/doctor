@@ -3,10 +3,7 @@ import * as Screens from '@screens'
 import { NavigationContainer } from '@react-navigation/native'
 import AppRoutes from './app.routes'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
-import {
-  NativeStackScreenProps,
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack'
+import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 
 export type RootStackParamList = {
   App: undefined
@@ -16,13 +13,22 @@ export type RootStackParamList = {
   AddAppointmentScreen: {
     id: string
   }
+  AssistantChatScreen:
+    | {
+        id: string
+        create?: never
+      }
+    | {
+        id?: never
+        create: true
+      }
 }
 
 export type StackNavigationProps<
   Screen extends keyof RootStackParamList | never = never,
-> = NativeStackScreenProps<RootStackParamList, Screen>
+> = StackScreenProps<RootStackParamList, Screen>
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Stack = createStackNavigator<RootStackParamList>()
 
 const Routes: React.FC = () => {
   const theme = useAdaptiveTheme()
@@ -30,7 +36,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="AddAppointmentScreen"
+        initialRouteName="App"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
         })}
@@ -45,6 +51,11 @@ const Routes: React.FC = () => {
           name="AddAppointmentScreen"
           options={{ headerTitle: 'Добавить посещение', headerShown: false }}
           component={Screens.AddAppointmentScreen}
+        />
+        <Stack.Screen
+          name="AssistantChatScreen"
+          options={{ headerTitle: 'Чат' }}
+          component={Screens.AssistantChatScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
