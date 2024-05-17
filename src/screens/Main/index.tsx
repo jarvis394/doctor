@@ -5,6 +5,7 @@ import { AppointmentCard } from '@components/AppointmentCard'
 import Section from '@components/Section'
 import Screen from '@components/Screen'
 import ActionButton from './ActionButton'
+import { FilePicker } from '@components/FilePicker'
 
 const Root = styled(Screen)({
   gap: 12,
@@ -56,12 +57,18 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
       >
         <AppointmentCard />
         <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+      </Section>
+      <Section
+        onPress={() => {
+          console.log('AppointmentsScreen')
+        }}
+        title="История"
+      >
         <AppointmentCard />
         <AppointmentCard />
         <AppointmentCard />
       </Section>
+      <FilePicker />
     </Root>
   )
 }
