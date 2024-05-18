@@ -8,11 +8,13 @@ import {
   UpdateData,
   addDoc,
   deleteDoc,
+  doc,
   getDoc,
   updateDoc,
 } from 'firebase/firestore'
 import { setDoctors } from './doctors'
 import { Doctor } from 'src/types/Doctor'
+import { firestore } from '@config/firebase'
 
 interface AppointmentsState {
   currentEditingAppointment:
@@ -120,8 +122,8 @@ export const createAppointment = createAsyncThunk<
     {
       ...appointment,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      doctor: db.doctor(user.id, appointment.doctor),
+      //@ts-expect-error
+      doctor: doc(firestore, appointment.doctor),
     }
   )
   const newAppointment = { ...appointment, id: docRef.id } as Appointment
@@ -151,8 +153,8 @@ export const editAppointment = createAsyncThunk<
     {
       ...appointment,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      doctor: db.doctor(user.id, appointment.doctor),
+      //@ts-expect-error
+      doctor: doc(firestore, appointment.doctor),
     }
   )
 

@@ -92,6 +92,7 @@ const AddAppointmentScreen: React.FC<
 
   const handleAddAppointment = () => {
     if (!currentEditingAppointment) return
+    saveToStore()
 
     if (edit) {
       if (!currentEditingAppointment.id) return
@@ -100,6 +101,7 @@ const AddAppointmentScreen: React.FC<
     } else {
       dispatch(createAppointment(currentEditingAppointment))
     }
+
     navigation.popToTop()
   }
 
