@@ -59,6 +59,9 @@ export default (_props: ConfigContext): ExpoConfig => ({
     ],
   ],
   extra: {
+    eas: {
+      projectId: 'a93bb9a6-4f26-455b-bff7-4ab588391d2b',
+    },
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
     projectId: process.env.PROJECT_ID,
