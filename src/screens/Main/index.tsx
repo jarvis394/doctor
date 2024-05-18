@@ -57,18 +57,12 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
       >
         <AppointmentCard />
         <AppointmentCard />
-      </Section>
-      <Section
-        onPress={() => {
-          console.log('AppointmentsScreen')
-        }}
-        title="История"
-      >
+        <AppointmentCard />
+        <AppointmentCard />
         <AppointmentCard />
         <AppointmentCard />
         <AppointmentCard />
       </Section>
-      <FilePicker />
     </Root>
   )
 }
