@@ -5,7 +5,6 @@ import { AppointmentCard } from '@components/AppointmentCard'
 import Section from '@components/Section'
 import Screen from '@components/Screen'
 import ActionButton from './ActionButton'
-import { FilePicker } from '@components/FilePicker'
 
 const Root = styled(Screen)({
   gap: 12,
