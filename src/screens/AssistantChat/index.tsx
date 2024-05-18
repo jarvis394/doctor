@@ -6,14 +6,7 @@ import { StackNavigationProps } from '@routes'
 import { CHAT_TEST_DATA } from '@screens/Assistant'
 import React from 'react'
 import { ScrollView } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
-const History = styled(ScrollView)({
-  display: 'flex',
-  flexDirection: 'column',
-  flexGrow: 1,
-  padding: 16,
-})
+import { IconButton } from 'react-native-paper'
 
 const InputContainer = styled.View({
   display: 'flex',
@@ -21,8 +14,7 @@ const InputContainer = styled.View({
   width: '100%',
   flexDirection: 'row',
   padding: 16,
-  position: 'absolute',
-  bottom: 0,
+  alignItems: 'center',
 })
 
 const AssistantChatScreen: React.FC<
@@ -32,33 +24,35 @@ const AssistantChatScreen: React.FC<
 
   return (
     <Screen
+      style={{ height: '100%' }}
       safeAreaProps={{
         edges: ['left', 'right', 'bottom'],
-        style: { paddingBottom: 0, flexGrow: 1 },
+        style: {
+          height: '100%',
+          paddingBottom: 0,
+        },
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        height: '100%',
       }}
     >
-      <KeyboardAwareScrollView
-        style={{
-          flexGrow: 1,
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-        }}
-      >
-        <History
-          contentContainerStyle={{
-            rowGap: 16,
-            flexGrow: 1,
+      <ScrollView contentContainerStyle={{ rowGap: 12, padding: 16 }}>
+        {chat.history.map((message) => (
+          <ChatMessage message={message} key={message.id} />
+        ))}
+      </ScrollView>
+
+      <InputContainer>
+        <Input placeholder="Напишите сообщение..." />
+        <IconButton
+          icon="send"
+          size={24}
+          onPress={() => {
+            console.log('send')
           }}
-        >
-          {chat.history.map((message) => (
-            <ChatMessage message={message} key={message.id} />
-          ))}
-        </History>
-        <InputContainer>
-          <Input placeholder="Напишите сообщение..." />
-        </InputContainer>
-      </KeyboardAwareScrollView>
+        />
+      </InputContainer>
     </Screen>
   )
 }

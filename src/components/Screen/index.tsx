@@ -45,6 +45,7 @@ const Screen: React.FC<ScreenProps> = ({
       contentContainerStyle={{
         flexGrow: 1,
       }}
+      enableOnAndroid
       {...props}
     >
       <SafeArea edges={safeAreaEdges} {...safeAreaProps}>

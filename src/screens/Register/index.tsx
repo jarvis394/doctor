@@ -1,13 +1,17 @@
-import { Button } from '@components/Button'
 import Input from '@components/Input'
+import { Button } from '@components/Button'
 import Screen from '@components/Screen'
 import styled from '@emotion/native'
 import { StackNavigationProps } from '@routes'
 import React, { useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
-import { Text } from 'react-native-paper'
-// import auth from '@react-native-firebase/auth'
+import { Dialog, Portal, Text, Button as PaperButton } from 'react-native-paper'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, firestore } from '@config/firebase'
+import { doc, setDoc } from 'firebase/firestore'
+import { setIsAuthLoading, setIsLoggedIn, setUserData } from '@store/auth'
+import { useAppDispatch } from '@store/index'
 
 const Root = styled.View({
   display: 'flex',
@@ -59,33 +63,57 @@ const RegisterScreen: React.FC<StackNavigationProps<'RegisterScreen'>> = ({
   const theme = useAdaptiveTheme()
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [errorText, setErrorText] = useState<string>('')
+  const [visible, setVisible] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
+  const dispatch = useAppDispatch()
+
+  const showDialog = () => setVisible(true)
+  const hideDialog = () => setVisible(false)
 
   const handleGoToLogin = () => {
     navigation.push('LoginScreen')
   }
 
   const handleRegister = () => {
-    console.log(email, password)
+    setIsLoading(true)
 
-    navigation.push('App')
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (response) => {
+        const uid = response.user.uid
+        const data = {
+          id: uid,
+          email,
+          avatarUrl: null,
+        }
+        const usersRef = doc(firestore, 'users', uid)
+        await setDoc(usersRef, data)
+        setIsLoading(false)
 
-    // auth()
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then(() => {
-    //     console.log('User account created & signed in!')
-    //     navigation.push('App')
-    //   })
-    //   .catch((error) => {
-    //     if (error.code === 'auth/email-already-in-use') {
-    //       console.log('That email address is already in use!')
-    //     }
+        dispatch(
+          setUserData({
+            id: response.user.uid,
+            avatarUrl: response.user.photoURL,
+          })
+        )
+        dispatch(setIsLoggedIn(true))
+        dispatch(setIsAuthLoading(false))
 
-    //     if (error.code === 'auth/invalid-email') {
-    //       console.log('That email address is invalid!')
-    //     }
+        navigation.push('App')
+      })
+      .catch((error) => {
+        setIsLoading(false)
 
-    //     console.error(error)
-    //   })
+        if (error.code === 'auth/email-already-in-use') {
+          setErrorText('That email address is already in use!')
+          showDialog()
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          setErrorText('That email address is invalid!')
+          showDialog()
+        }
+      })
   }
 
   const handleEmailChange = (value: string) => {
@@ -130,14 +158,32 @@ const RegisterScreen: React.FC<StackNavigationProps<'RegisterScreen'>> = ({
             />
           </Block>
           <Block>
-            <Button mode="contained" onPress={handleRegister}>
+            <Button
+              mode="contained"
+              disabled={isLoading}
+              loading={isLoading}
+              onPress={handleRegister}
+            >
               Зарегистрироваться
             </Button>
-            <Button mode="contained-tonal" onPress={handleGoToLogin}>
-              Авторизация
+            <Button mode="text" onPress={handleGoToLogin}>
+              У меня уже есть аккаунт
             </Button>
           </Block>
         </Content>
+        <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>Error</Dialog.Title>
+            <Dialog.Content>
+              <Text variant="bodyMedium">{errorText}</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <PaperButton mode="text" onPress={hideDialog}>
+                Хорошо
+              </PaperButton>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </Root>
     </Screen>
   )

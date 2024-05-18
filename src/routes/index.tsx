@@ -8,11 +8,14 @@ import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 export type RootStackParamList = {
   App: undefined
   LoginScreen: undefined
+  SelectDoctorScreen: undefined
   RegisterScreen: undefined
   AppointmentScreen: {
     id: string
   }
   AddAppointmentScreen: undefined
+  SplashScreen: undefined
+  AddDoctorScreen: undefined
   AssistantChatScreen:
     | {
         id: string
@@ -36,7 +39,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
-        initialRouteName="RegisterScreen"
+        initialRouteName="SplashScreen"
         screenOptions={({ route }) => ({
           headerShown: route.name !== 'App',
           headerTitleStyle: {
@@ -46,9 +49,18 @@ const Routes: React.FC = () => {
           headerStyle: {
             backgroundColor: theme.colors.background,
           },
+          cardStyle: {
+            height: '100%',
+            backgroundColor: theme.colors.background,
+          },
         })}
       >
         <Stack.Screen name="App" component={AppRoutes} />
+        <Stack.Screen
+          name="SplashScreen"
+          options={{ headerShown: false }}
+          component={Screens.SplashScreen}
+        />
         <Stack.Screen
           name="AppointmentScreen"
           options={{ headerTitle: 'Посещение' }}
@@ -76,6 +88,16 @@ const Routes: React.FC = () => {
           name="RegisterScreen"
           options={{ headerShown: false }}
           component={Screens.RegisterScreen}
+        />
+        <Stack.Screen
+          name="SelectDoctorScreen"
+          options={{ headerShown: true, headerTitle: 'Выбрать врача' }}
+          component={Screens.SelectDoctorScreen}
+        />
+        <Stack.Screen
+          name="AddDoctorScreen"
+          options={{ headerShown: true, headerTitle: 'Добавить врача' }}
+          component={Screens.AddDoctorScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

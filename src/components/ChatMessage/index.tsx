@@ -75,8 +75,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   return (
     <ChatMessageContainer
       style={{
-        ...(message.isUser && { justifyContent: 'flex-start' }),
-        ...(message.isAssistant && { justifyContent: 'flex-end' }),
+        ...(message.isUser && { justifyContent: 'flex-end' }),
+        ...(message.isAssistant && { justifyContent: 'flex-start' }),
       }}
     >
       <Root

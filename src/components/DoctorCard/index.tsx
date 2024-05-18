@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { View } from 'react-native'
+import { Doctor } from 'src/types/Doctor'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
@@ -100,7 +101,15 @@ const SideDiv = styled.View({
   justifyContent: 'flex-start',
 })
 
-const DoctorCardUnmemoized: React.FC = () => {
+type DoctorCardProps = {
+  withHeader?: boolean
+  doctor: Doctor
+}
+
+const DoctorCardUnmemoized: React.FC<DoctorCardProps> = ({
+  doctor,
+  withHeader,
+}) => {
   const theme = useAdaptiveTheme()
   const navigation = useNavigation<BottomTabNavigationProps['navigation']>()
 
@@ -108,23 +117,29 @@ const DoctorCardUnmemoized: React.FC = () => {
     navigation.push('AppointmentScreen', { id: '1' })
   }
 
+  if (!doctor) return
+
   return (
     <Root borderless onPress={handlePress}>
       <>
-        <TitleContainer elevation={1} mode="flat">
-          <Title>Карточка врача</Title>
-        </TitleContainer>
+        {withHeader && (
+          <TitleContainer elevation={1} mode="flat">
+            <Title>Карточка врача</Title>
+          </TitleContainer>
+        )}
         <Content elevation={2} mode="flat">
           <InfoContainer>
-            <Avatar />
+            <Avatar source={{ uri: doctor.avatarUrl || '' }} />
             <View
               style={{
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
-              <Name>Небудчикова Елизавета Николаевна</Name>
-              <JobTitle>Стоматолог-терапевт</JobTitle>
+              <Name>
+                {doctor.lastName} {doctor.firstName} {doctor.middleName}
+              </Name>
+              <JobTitle>{doctor.speciality}</JobTitle>
             </View>
             <ListContainer>
               <ListItem>
@@ -133,7 +148,7 @@ const DoctorCardUnmemoized: React.FC = () => {
                   name="map-pin"
                   size={16}
                 />
-                <SecondaryText>MEDI, пр. Металлистов, 9</SecondaryText>
+                <SecondaryText>{doctor.workplace}</SecondaryText>
               </ListItem>
             </ListContainer>
           </InfoContainer>

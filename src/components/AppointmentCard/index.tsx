@@ -5,7 +5,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FeatherIcons from 'react-native-vector-icons/Feather'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import { useNavigation } from '@react-navigation/native'
-import { BottomTabNavigationProps } from '@routes/app.routes'
+import { StackNavigationProps } from '@routes'
+import { Appointment, AppointmentTag } from 'src/types/Appointment'
+import dayjs from 'dayjs'
+import exhaustivnessCheck from '@utils/exhaustivnessCheck'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
@@ -80,20 +83,41 @@ const TagText = styled(Text)({
   fontFamily: 'GoogleSans-Medium',
 })
 
-const AppointmentCardUnmemoized: React.FC = () => {
+export const tagToTagName = (tag: AppointmentTag) => {
+  switch (tag) {
+    case AppointmentTag.RECURRING:
+      return 'Повторяющееся'
+    case AppointmentTag.CONSULTATION:
+      return 'Консультация'
+    case AppointmentTag.ONE_TIME_VISIT:
+      return 'Визит'
+    default:
+      exhaustivnessCheck(tag)
+  }
+}
+
+type AppointmentCardProps = {
+  appointment: Appointment
+}
+
+const AppointmentCardUnmemoized: React.FC<AppointmentCardProps> = ({
+  appointment,
+  ...props
+}) => {
   const theme = useAdaptiveTheme()
-  const navigation = useNavigation<BottomTabNavigationProps['navigation']>()
+  const navigation = useNavigation<StackNavigationProps['navigation']>()
+  const formattedTime = dayjs(appointment.time).format('D MMMM, YYYY')
 
   const handlePress = () => {
-    navigation.push('AddAppointmentScreen', { id: '1' })
+    navigation.push('AppointmentScreen', { id: '1' })
   }
 
   return (
-    <Root borderless onPress={handlePress}>
+    <Root {...props} key={appointment.id} borderless onPress={handlePress}>
       <>
         <Content elevation={2} mode="flat">
           <InfoContainer>
-            <Title>Стоматолог-терапевт</Title>
+            <Title>{appointment.title}</Title>
             <ListContainer>
               <ListItem>
                 <FeatherIcons
@@ -101,7 +125,7 @@ const AppointmentCardUnmemoized: React.FC = () => {
                   name="map-pin"
                   size={16}
                 />
-                <SecondaryText>MEDI, пр. Металлистов, 9</SecondaryText>
+                <SecondaryText>{appointment.place}</SecondaryText>
               </ListItem>
               <ListItem>
                 <MaterialIcons
@@ -109,7 +133,7 @@ const AppointmentCardUnmemoized: React.FC = () => {
                   name="access-time"
                   size={16}
                 />
-                <SecondaryText>15 апреля, 15:00</SecondaryText>
+                <SecondaryText>{formattedTime}</SecondaryText>
               </ListItem>
             </ListContainer>
           </InfoContainer>
@@ -120,9 +144,11 @@ const AppointmentCardUnmemoized: React.FC = () => {
           />
         </Content>
         <TagsContainer elevation={1} mode="flat">
-          <Tag>
-            <TagText>Повторяющееся</TagText>
-          </Tag>
+          {appointment.tags.map((tag, i) => (
+            <Tag key={i}>
+              <TagText>{tagToTagName(tag)}</TagText>
+            </Tag>
+          ))}
         </TagsContainer>
       </>
     </Root>

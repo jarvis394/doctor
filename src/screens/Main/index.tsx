@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BottomTabNavigationProps } from '@routes/app.routes'
 import styled from '@emotion/native'
 import { AppointmentCard } from '@components/AppointmentCard'
 import Section from '@components/Section'
 import Screen from '@components/Screen'
 import ActionButton from './ActionButton'
+import { useAppDispatch, useAppSelector } from '@store/index'
+import { fetchAppointments, getAppointments } from '@store/appointments'
 
 const Root = styled(Screen)({
   gap: 12,
@@ -13,6 +15,9 @@ const Root = styled(Screen)({
 const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
   navigation,
 }) => {
+  const dispatch = useAppDispatch()
+  const appointments = useAppSelector(getAppointments)
+
   const handleAddAppointment = () => {
     navigation.push('AddAppointmentScreen')
   }
@@ -20,6 +25,16 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
   const handleGoToAssistant = () => {
     navigation.jumpTo('AssistantScreen')
   }
+
+  const handleGoToDoctors = () => {
+    navigation.push('SelectDoctorScreen')
+  }
+
+  useEffect(() => {
+    dispatch(fetchAppointments())
+  }, [dispatch])
+
+  console.log(appointments)
 
   return (
     <Root>
@@ -41,12 +56,12 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
           variant="gradient"
           onPress={handleGoToAssistant}
         />
-        {/* <ActionButton
+        <ActionButton
           icon="medical-information"
           title="Карточки врачей"
           variant="default"
-          onPress={handleAddAppointment}
-        /> */}
+          onPress={handleGoToDoctors}
+        />
       </Section>
       <Section
         onPress={() => {
@@ -54,13 +69,19 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
         }}
         title="Предстоящие визиты"
       >
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
-        <AppointmentCard />
+        {appointments.map((appointment) => (
+          <AppointmentCard key={appointment.id} appointment={appointment} />
+        ))}
+      </Section>
+      <Section
+        onPress={() => {
+          console.log('AppointmentsScreen')
+        }}
+        title="История визитов"
+      >
+        {appointments.map((appointment) => (
+          <AppointmentCard key={appointment.id} appointment={appointment} />
+        ))}
       </Section>
     </Root>
   )
