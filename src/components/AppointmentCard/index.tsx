@@ -106,10 +106,10 @@ const AppointmentCardUnmemoized: React.FC<AppointmentCardProps> = ({
 }) => {
   const theme = useAdaptiveTheme()
   const navigation = useNavigation<StackNavigationProps['navigation']>()
-  const formattedTime = dayjs(appointment.time).format('D MMMM, YYYY')
+  const formattedTime = dayjs(appointment.time).format('D MMMM, YYYY HH:mm')
 
   const handlePress = () => {
-    navigation.push('AppointmentScreen', { id: '1' })
+    navigation.push('AppointmentScreen', { id: appointment.id })
   }
 
   return (

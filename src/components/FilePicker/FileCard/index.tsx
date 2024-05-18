@@ -51,9 +51,9 @@ const FileCardUnmemoized: React.FC = () => {
           VeryLongFileNameDocument.xml
         </SecondaryText>
       </Content>
-      <DeleteIconWrapper onPress={() => console.log('press')} borderless>
+      {/* <DeleteIconWrapper onPress={() => console.log('press')} borderless>
         <MaterialIcons color="#EA4335" name="close" size={24} />
-      </DeleteIconWrapper>
+      </DeleteIconWrapper> */}
     </Root>
   )
 }

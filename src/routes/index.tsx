@@ -8,7 +8,7 @@ import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 export type RootStackParamList = {
   App: undefined
   LoginScreen: undefined
-  SelectDoctorScreen: undefined
+  SelectDoctorScreen?: { edit?: boolean }
   RegisterScreen: undefined
   AppointmentScreen: {
     id: string
@@ -16,6 +16,9 @@ export type RootStackParamList = {
   AddAppointmentScreen: undefined
   SplashScreen: undefined
   AddDoctorScreen: undefined
+  EditAppointmentScreen: {
+    id: string
+  }
   AssistantChatScreen:
     | {
         id: string
@@ -98,6 +101,11 @@ const Routes: React.FC = () => {
           name="AddDoctorScreen"
           options={{ headerShown: true, headerTitle: 'Добавить врача' }}
           component={Screens.AddDoctorScreen}
+        />
+        <Stack.Screen
+          name="EditAppointmentScreen"
+          options={{ headerShown: true, headerTitle: 'Изменить посещение' }}
+          component={Screens.EditAppointmentScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

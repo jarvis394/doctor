@@ -85,7 +85,7 @@ const ChatCardUnmemoized: React.FC<ChatCardProps> = ({ chat }) => {
   const theme = useAdaptiveTheme()
   const navigation = useNavigation<BottomTabNavigationProps['navigation']>()
   const timestampText = useMemo(
-    () => dayjs(chat.dateStarted).format('D MMMM, YYYY'),
+    () => dayjs(chat.dateStarted).format('D MMMM, YYYY HH:mm'),
     [chat.dateStarted]
   )
   const historyItems = useMemo(() => {

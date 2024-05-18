@@ -9,7 +9,7 @@ import { fetchDoctors, getDoctors } from '@store/doctors'
 
 const FindDoctorScreen: React.FC<
   StackNavigationProps<'SelectDoctorScreen'>
-> = ({ navigation }) => {
+> = ({ navigation, route }) => {
   const doctors = useAppSelector(getDoctors)
   const dispatch = useAppDispatch()
 
@@ -40,7 +40,11 @@ const FindDoctorScreen: React.FC<
         Создать карточку врача
       </Button>
       {doctors.map((doctor) => (
-        <DoctorCard doctor={doctor} key={doctor.id} />
+        <DoctorCard
+          editMode={route.params?.edit}
+          doctorId={doctor.id}
+          key={doctor.id}
+        />
       ))}
     </Screen>
   )

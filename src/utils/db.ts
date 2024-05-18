@@ -39,4 +39,6 @@ export const db = {
     getDocs(typedCollection<Appointment>(`users/${uid}/appointments`)),
   doctors: (uid: string) =>
     getDocs(typedCollection<Doctor>(`users/${uid}/doctors`)),
+  doctor: (userId: string, uid: string) =>
+    getDocs(typedCollection<Doctor>(`users/${userId}/doctors/${uid}`)),
 }

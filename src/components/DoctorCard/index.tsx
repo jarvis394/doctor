@@ -7,7 +7,13 @@ import { useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { View } from 'react-native'
-import { Doctor } from 'src/types/Doctor'
+import { useAppDispatch, useAppSelector } from '@store/index'
+import {
+  getCurrentEditingAppointment,
+  setCurrentEditingAppointment,
+} from '@store/appointments'
+import { getDoctorReferencePath } from '@utils/getDoctorReferencePath'
+import { getUser } from '@store/auth'
 
 const Root = styled(TouchableRipple)({
   borderRadius: 24,
@@ -103,18 +109,37 @@ const SideDiv = styled.View({
 
 type DoctorCardProps = {
   withHeader?: boolean
-  doctor: Doctor
+  editMode?: boolean
+  doctorId: string
 }
 
 const DoctorCardUnmemoized: React.FC<DoctorCardProps> = ({
-  doctor,
+  editMode,
   withHeader,
+  doctorId,
 }) => {
+  const user = useAppSelector(getUser)
+  const doctor = useAppSelector((state) =>
+    state.doctors.data.find((e) => e.id === doctorId)
+  )
   const theme = useAdaptiveTheme()
+  const dispatch = useAppDispatch()
+  const currentEditingAppointment = useAppSelector(getCurrentEditingAppointment)
   const navigation = useNavigation<BottomTabNavigationProps['navigation']>()
 
   const handlePress = () => {
-    navigation.push('AppointmentScreen', { id: '1' })
+    if (editMode) {
+      if (!currentEditingAppointment) return
+      if (!user) return
+      const editedAppointment = {
+        ...currentEditingAppointment,
+        doctor: getDoctorReferencePath(user.id, doctorId),
+      }
+      dispatch(setCurrentEditingAppointment(editedAppointment))
+      return navigation.pop()
+    }
+
+    navigation.push('AddDoctorScreen')
   }
 
   if (!doctor) return
@@ -129,7 +154,7 @@ const DoctorCardUnmemoized: React.FC<DoctorCardProps> = ({
         )}
         <Content elevation={2} mode="flat">
           <InfoContainer>
-            <Avatar source={{ uri: doctor.avatarUrl || '' }} />
+            {doctor.avatarUrl && <Avatar source={{ uri: doctor.avatarUrl }} />}
             <View
               style={{
                 display: 'flex',

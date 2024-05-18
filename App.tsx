@@ -32,9 +32,9 @@ const App: React.FC = () => {
     if (fontsLoaded || fontError) {
       await SplashScreen.hideAsync()
       await NavigationBar.setPositionAsync('absolute')
-      await NavigationBar.setBackgroundColorAsync(theme.colors.elevation.level2)
+      await NavigationBar.setBackgroundColorAsync('transparent')
     }
-  }, [fontsLoaded, fontError, theme.colors.elevation.level2])
+  }, [fontsLoaded, fontError])
 
   if (!fontsLoaded && !fontError) {
     return null

@@ -6,11 +6,18 @@ export enum AppointmentTag {
   CONSULTATION = 'consultation',
 }
 
+export interface AppointmentFile {
+  filename: string
+  downloadUrl: string
+}
+
 export interface Appointment {
   id: string
   title: string
-  doctor: Doctor
+  doctor?: Doctor
   time: number
   place: string
+  comment?: string
+  files: AppointmentFile[]
   tags: AppointmentTag[]
 }

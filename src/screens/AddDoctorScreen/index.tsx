@@ -5,7 +5,7 @@ import { StackNavigationProps } from '@routes'
 import Section from '@components/Section'
 import Input from '@components/Input'
 import { Button } from '@components/Button'
-import { Avatar, TouchableRipple } from 'react-native-paper'
+import { Avatar, Text, TouchableRipple } from 'react-native-paper'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useAdaptiveTheme } from '@hooks/useAdaptiveTheme'
 import * as ImagePicker from 'expo-image-picker'
@@ -20,7 +20,7 @@ import { getUser } from '@store/auth'
 import { addDoctor } from '@store/doctors'
 
 const Root = styled(Screen)({
-  padding: 16,
+  paddingTop: 16,
 })
 
 const FullNameContainer = styled.View({
@@ -32,7 +32,8 @@ const FullNameContainer = styled.View({
 
 const BottomBar = styled.View({
   position: 'absolute',
-  bottom: 0,
+  bottom: 16,
+  padding: 16,
   width: '100%',
 })
 
@@ -64,8 +65,7 @@ const AddDoctorScreen: React.FC<StackNavigationProps<'AddDoctorScreen'>> = ({
   const user = useAppSelector(getUser)
   const theme = useAdaptiveTheme()
   const [avatar, setAvatar] = useState<string | undefined>(undefined)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_progress, setProgress] = useState<string>('')
+  const [progress, setProgress] = useState<string>('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [middleName, setMiddleName] = useState('')
@@ -73,7 +73,7 @@ const AddDoctorScreen: React.FC<StackNavigationProps<'AddDoctorScreen'>> = ({
   const [speciality, setSpeciality] = useState('')
   const dispatch = useAppDispatch()
 
-  const ImageChoiceAndUpload = async () => {
+  const handleImageChoiceAndUpload = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: false,
@@ -147,19 +147,25 @@ const AddDoctorScreen: React.FC<StackNavigationProps<'AddDoctorScreen'>> = ({
   return (
     <Root safeAreaProps={{ edges: ['left', 'right', 'bottom'] }}>
       <AvatarWrapper>
-        <AvatarSkeleton onPress={ImageChoiceAndUpload}>
-          {avatar ? (
-            <Avatar.Image source={{ uri: avatar }} size={96} />
-          ) : (
-            <MaterialIcons
-              color={theme.colors.text}
-              name="camera-alt"
-              size={24}
-            />
-          )}
+        <AvatarSkeleton borderless onPress={handleImageChoiceAndUpload}>
+          <>
+            {avatar && <Avatar.Image source={{ uri: avatar }} size={96} />}
+            {!avatar && !progress && (
+              <MaterialIcons
+                color={theme.colors.text}
+                name="camera-alt"
+                size={24}
+              />
+            )}
+            {progress && !avatar && (
+              <Text variant="labelMedium" style={{ color: theme.colors.text }}>
+                {progress}
+              </Text>
+            )}
+          </>
         </AvatarSkeleton>
       </AvatarWrapper>
-      <Section title="Основные данные">
+      <Section contentProps={{ style: { gap: 0 } }} title="Основные данные">
         <FullNameContainer>
           <Input
             onChangeText={(text) => setFirstName(text)}
