@@ -92,21 +92,19 @@ const AddAppointmentScreen: React.FC<
 
   const handleAddAppointment = () => {
     if (!currentEditingAppointment) return
-    saveToStore()
 
     if (edit) {
       if (!currentEditingAppointment.id) return
-
-      dispatch(editAppointment(currentEditingAppointment))
+      dispatch(editAppointment(getCurrentAppointmetState()))
     } else {
-      dispatch(createAppointment(currentEditingAppointment))
+      dispatch(createAppointment(getCurrentAppointmetState()))
     }
 
     navigation.popToTop()
   }
 
   const handleSelectDoctor = () => {
-    saveToStore()
+    dispatch(setCurrentEditingAppointment(getCurrentAppointmetState()))
     navigation.push('SelectDoctorScreen', { edit: true })
   }
 
@@ -117,18 +115,15 @@ const AddAppointmentScreen: React.FC<
     navigation.popToTop()
   }
 
-  const saveToStore = () => {
-    if (!currentEditingAppointment) return
-
-    dispatch(
-      setCurrentEditingAppointment({
-        ...currentEditingAppointment,
-        tags,
-        place,
-        title,
-        time: dayjs(datetime).unix(),
-      })
-    )
+  const getCurrentAppointmetState = () => {
+    return {
+      ...currentEditingAppointment,
+      files: [],
+      tags,
+      place,
+      title,
+      time: dayjs(datetime).unix() * 1000,
+    }
   }
 
   useEffect(() => {

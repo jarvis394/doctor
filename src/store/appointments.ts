@@ -176,7 +176,7 @@ export const deleteAppointment = createAsyncThunk<
 
   await deleteDoc(typedDoc<Appointment>(`users/${user.id}/appointments/${id}`))
 
-  dispatch(deleteAppointment(id))
+  dispatch(deleteAppointmentInStore(id))
 
   return true
 })
