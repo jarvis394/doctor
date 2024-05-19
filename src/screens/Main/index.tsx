@@ -7,6 +7,7 @@ import Screen from '@components/Screen'
 import ActionButton from './ActionButton'
 import { useAppDispatch, useAppSelector } from '@store/index'
 import { fetchAppointments, getAppointments } from '@store/appointments'
+import dayjs from 'dayjs'
 
 const Root = styled(Screen)({
   gap: 12,
@@ -33,8 +34,6 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
   useEffect(() => {
     dispatch(fetchAppointments())
   }, [dispatch])
-
-  console.log(appointments)
 
   return (
     <Root>
@@ -69,9 +68,13 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
         }}
         title="Предстоящие визиты"
       >
-        {appointments.map((appointment) => (
-          <AppointmentCard key={appointment.id} appointment={appointment} />
-        ))}
+        {appointments
+          .filter((appointment) => {
+            return dayjs(appointment.time).unix() >= dayjs().unix()
+          })
+          .map((appointment) => (
+            <AppointmentCard key={appointment.id} appointment={appointment} />
+          ))}
       </Section>
       <Section
         onPress={() => {
@@ -79,9 +82,13 @@ const MainScreen: React.FC<BottomTabNavigationProps<'MainScreen'>> = ({
         }}
         title="История визитов"
       >
-        {appointments.map((appointment) => (
-          <AppointmentCard key={appointment.id} appointment={appointment} />
-        ))}
+        {appointments
+          .filter((appointment) => {
+            return dayjs(appointment.time).unix() < dayjs().unix()
+          })
+          .map((appointment) => (
+            <AppointmentCard key={appointment.id} appointment={appointment} />
+          ))}
       </Section>
     </Root>
   )
