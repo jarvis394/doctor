@@ -126,7 +126,7 @@ const AddAppointmentScreen: React.FC<
         tags,
         place,
         title,
-        time: dayjs(datetime).unix(),
+        time: dayjs(datetime).unix() * 1000,
       })
     )
   }
