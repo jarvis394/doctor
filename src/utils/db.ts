@@ -12,6 +12,8 @@ import {
 } from 'firebase/firestore'
 import { Appointment } from 'src/types/Appointment'
 import { Doctor } from 'src/types/Doctor'
+import { Chat } from 'src/types/Chat'
+import { ChatMessage } from 'src/types/ChatMessage'
 
 export const converter = <T>(): FirestoreDataConverter<T> => ({
   toFirestore: (
@@ -41,4 +43,10 @@ export const db = {
     getDocs(typedCollection<Doctor>(`users/${uid}/doctors`)),
   doctor: (userId: string, uid: string) =>
     getDocs(typedCollection<Doctor>(`users/${userId}/doctors/${uid}`)),
+  chats: (uid: string) =>
+    getDocs(typedCollection<Chat>(`users/${uid}/chats`)),
+  chatMessages: (userId: string, uid: string) =>
+    getDocs(
+      typedCollection<ChatMessage>(`users/${userId}/chats/${uid}/history`)
+    ),
 }

@@ -5,10 +5,12 @@ import Section from '@components/Section'
 import Stars from '@components/svg/Stars'
 import styled from '@emotion/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Text } from 'react-native-paper'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Chat } from 'src/types/Chat'
+import {useAppDispatch, useAppSelector} from "@store/index";
+import {fetchChats, getChats} from "@store/chats";
 
 // todo: remove
 export const CHAT_TEST_DATA: Chat[] = [
@@ -97,10 +99,18 @@ const AssistantScreen: React.FC<
 > = ({ navigation }) => {
   const data = CHAT_TEST_DATA
   const handleCreateChat = () => {
+    console.log(chats)
     navigation.push('AssistantChatScreen', {
       create: true,
     })
   }
+
+  const chats = useAppSelector(getChats)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchChats())
+  }, [dispatch])
 
   return (
     <Screen>

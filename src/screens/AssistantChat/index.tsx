@@ -4,7 +4,7 @@ import Screen from '@components/Screen'
 import styled from '@emotion/native'
 import { StackNavigationProps } from '@routes'
 import { CHAT_TEST_DATA } from '@screens/Assistant'
-import React from 'react'
+import React, {useState} from 'react'
 import { ScrollView } from 'react-native'
 import { IconButton } from 'react-native-paper'
 
@@ -21,7 +21,14 @@ const AssistantChatScreen: React.FC<
   StackNavigationProps<'AssistantChatScreen'>
 > = () => {
   const chat = CHAT_TEST_DATA[0]
-
+  const [message, setMessage] = useState('')
+  const handleMessageChange = (text: string) => {
+      setMessage(text)
+  }
+  const messageSent = () => {
+    console.log('Message sent:', message)
+    setMessage('')
+  }
   return (
     <Screen
       style={{ height: '100%' }}
@@ -44,13 +51,15 @@ const AssistantChatScreen: React.FC<
       </ScrollView>
 
       <InputContainer>
-        <Input placeholder="Напишите сообщение..." />
+        <Input
+            placeholder="Напишите сообщение..."
+            onChangeText={handleMessageChange}
+            value={message}
+        />
         <IconButton
           icon="send"
           size={24}
-          onPress={() => {
-            console.log('send')
-          }}
+          onPress={messageSent}
         />
       </InputContainer>
     </Screen>

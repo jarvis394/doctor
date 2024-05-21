@@ -5,12 +5,14 @@ import authReducer from './auth'
 import appReducer from './app'
 import doctorsReducer from './doctors'
 import appointmentsReducer from './appointments'
+import chatsReducer from './chats'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   app: appReducer,
   doctors: doctorsReducer,
   appointments: appointmentsReducer,
+  chats: chatsReducer,
 })
 
 const store = configureStore({
