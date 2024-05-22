@@ -9,7 +9,7 @@ import {useAppDispatch, useAppSelector} from '@store/index'
 import { Chat } from 'src/types/Chat'
 import { ChatMessage as ChatMessageType } from 'src/types/ChatMessage'
 import ChatMessage from "@components/ChatMessage";
-import {addChatMessage, getChats} from "@store/chats";
+import {addChat, addChatMessage, getChats} from "@store/chats";
 import {addDoc, collection} from "firebase/firestore";
 import {firestore} from "@config/firebase";
 import {getUser} from "@store/auth";
@@ -28,14 +28,16 @@ const AssistantChatScreen: React.FC<
 > = ({navigation, route}) => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(getUser)
+  const chats = useAppSelector(getChats)
 
   let chat: Chat
   const chatId: string|null = route.params.chatId
+
   if (chatId) {
-    chat = useAppSelector(getChats).find(c => c.id === chatId)
+    chat = chats.find(c => c.id === chatId)
   } else {
     //todo create for new chat
-    chat = useAppSelector(getChats).find(c => c.id === chatId)
+    chat = null
   }
 
   const [message, setMessage] = useState('')
@@ -43,6 +45,24 @@ const AssistantChatScreen: React.FC<
       setMessage(text)
   }
   const messageSent = async () => {
+      if (!chat) {
+          const chatData: Omit<Chat, 'id'> = {
+              dateStarted: Date.now(),
+              lastUpdated: Date.now(),
+              isWaitingForAssistantResponse: false
+          }
+          const userRef = collection(firestore, 'users', user.id, 'chats')
+          const chatDoc = await addDoc(userRef, chatData)
+
+          await dispatch(
+              addChat({
+                  ...chatData,
+                  id: chatDoc.id,
+                  history: []
+              })
+          )
+          chat = chats.find(c => c.id === chatId)
+      }
     const messageData: Omit<ChatMessageType, 'id'> = {
       isAssistant: false,
       isUser: true,
@@ -93,7 +113,7 @@ const AssistantChatScreen: React.FC<
       }}
     >
       <ScrollView contentContainerStyle={{ rowGap: 12, padding: 16 }}>
-        {chat.history.map((message) => (
+        {chat && chat.history.map((message) => (
           <ChatMessage message={message} key={message.id} />
         ))}
       </ScrollView>
