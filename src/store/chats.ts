@@ -41,17 +41,20 @@ export const fetchChats = createAsyncThunk<
 
   docs.forEach(async (doc) => {
     const data = doc.data()
-
-    const history: ChatMessage[] = []
-    // const historyDocs = await db.chatMessages(user.id, doc.id)
-
-    // historyDocs.forEach((historyDoc) => {
-    //   const historyData = historyDoc.data()
-    //   history.push({...historyData, id: historyDoc.id})
-    // })
-
-    res.push({ ...data, id: doc.id, history: history })
+    res.push({ ...data, id: doc.id })
   })
+
+  for (let chat of res) {
+    const history: ChatMessage[] = []
+    const historyDocs = await db.chatMessages(user.id, chat.id)
+
+    historyDocs.forEach((historyDoc) => {
+      const historyData = historyDoc.data()
+      history.push({...historyData, id: historyDoc.id})
+    })
+
+    chat.history = history
+  }
 
   return res
 })
@@ -65,6 +68,12 @@ const slice = createSlice({
     },
     addChat(state, { payload }: PayloadAction<Chat>) {
       state.data = [...state.data, payload]
+    },
+    addChatMessage(state, { payload }: PayloadAction<ChatMessage>) {
+      console.log(payload)
+      state.data.find(c => c.id === payload.chatId).history.push(payload)
+      console.log(state.data.find(c => c.id === payload.chatId).history.length)
+      state.data = [...state.data]
     },
   },
   extraReducers: (builder) => {
@@ -95,7 +104,7 @@ const slice = createSlice({
   },
 })
 
-export const { setChats, addChat } = slice.actions
+export const { setChats, addChat, addChatMessage } = slice.actions
 
 export const getChats = ({ chats }: { chats: ChatsState }) =>
   chats.data

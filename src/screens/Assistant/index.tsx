@@ -97,11 +97,10 @@ const HeaderTitleContainer = styled.View({
 const AssistantScreen: React.FC<
   BottomTabNavigationProps<'AssistantScreen'>
 > = ({ navigation }) => {
-  const data = CHAT_TEST_DATA
   const handleCreateChat = () => {
     console.log(chats)
     navigation.push('AssistantChatScreen', {
-      create: true,
+      chatId: null,
     })
   }
 
@@ -129,7 +128,7 @@ const AssistantScreen: React.FC<
         >
           Создать чат
         </Button>
-        {data.map((chat) => (
+        {chats.map((chat) => (
           <ChatCard key={chat.id} chat={chat} />
         ))}
       </Section>

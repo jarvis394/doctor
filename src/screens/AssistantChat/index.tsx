@@ -1,12 +1,18 @@
-import ChatMessage from '@components/ChatMessage'
 import Input from '@components/Input'
 import Screen from '@components/Screen'
 import styled from '@emotion/native'
 import { StackNavigationProps } from '@routes'
-import { CHAT_TEST_DATA } from '@screens/Assistant'
 import React, {useState} from 'react'
 import { ScrollView } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import {useAppDispatch, useAppSelector} from '@store/index'
+import { Chat } from 'src/types/Chat'
+import { ChatMessage as ChatMessageType } from 'src/types/ChatMessage'
+import ChatMessage from "@components/ChatMessage";
+import {addChatMessage, getChats} from "@store/chats";
+import {addDoc, collection} from "firebase/firestore";
+import {firestore} from "@config/firebase";
+import {getUser} from "@store/auth";
 
 const InputContainer = styled.View({
   display: 'flex',
@@ -19,15 +25,57 @@ const InputContainer = styled.View({
 
 const AssistantChatScreen: React.FC<
   StackNavigationProps<'AssistantChatScreen'>
-> = () => {
-  const chat = CHAT_TEST_DATA[0]
+> = ({navigation, route}) => {
+  const dispatch = useAppDispatch()
+  const user = useAppSelector(getUser)
+
+  let chat: Chat
+  const chatId: string|null = route.params.chatId
+  if (chatId) {
+    chat = useAppSelector(getChats).find(c => c.id === chatId)
+  } else {
+    //todo create for new chat
+    chat = useAppSelector(getChats).find(c => c.id === chatId)
+  }
+
   const [message, setMessage] = useState('')
   const handleMessageChange = (text: string) => {
       setMessage(text)
   }
-  const messageSent = () => {
-    console.log('Message sent:', message)
+  const messageSent = async () => {
+    const messageData: Omit<ChatMessageType, 'id'> = {
+      isAssistant: false,
+      isUser: true,
+      userId: user.id,
+      text: message,
+      timestamp: Date.now()
+    }
+
+    const chatRef = collection(firestore, 'users', user.id, 'chats', chat.id, 'history')
+    const userMessageDoc = await addDoc(chatRef, messageData)
+
+    dispatch(
+      addChatMessage({
+        ...messageData,
+        id: userMessageDoc.id,
+        chatId: chat.id,
+      })
+    )
     setMessage('')
+
+    //assistant response mock
+      const assistantMessageDoc = await addDoc(chatRef, messageData)
+
+      dispatch(
+          addChatMessage({
+              isAssistant: true,
+              isUser: false,
+              text: 'I RESPOND TO THEE',
+              timestamp: Date.now(),
+              id: assistantMessageDoc.id,
+              chatId: chat.id,
+          })
+      )
   }
   return (
     <Screen
