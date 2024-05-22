@@ -21,12 +21,12 @@ export type RootStackParamList = {
   }
   AssistantChatScreen:
     | {
-        id: string
-        create?: never
+        chatId: string
+        create?: boolean
       }
     | {
-        id?: never
-        create: true
+        chatId?: string
+        create: boolean
       }
 }
 

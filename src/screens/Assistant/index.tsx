@@ -5,55 +5,11 @@ import Section from '@components/Section'
 import Stars from '@components/svg/Stars'
 import styled from '@emotion/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Text } from 'react-native-paper'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { Chat } from 'src/types/Chat'
-import {useAppDispatch, useAppSelector} from "@store/index";
-import {fetchChats, getChats} from "@store/chats";
-
-// todo: remove
-export const CHAT_TEST_DATA: Chat[] = [
-  {
-    dateStarted: Date.now(),
-    lastUpdated: Date.now(),
-    id: '1',
-    isWaitingForAssistantResponse: false,
-    history: [
-      {
-        id: '1',
-        isAssistant: false,
-        isUser: true,
-        text: 'Как сказать врачу, что мне больно?',
-        timestamp: Date.now(),
-        userId: '1',
-      },
-      {
-        id: '2',
-        isAssistant: true,
-        isUser: false,
-        text: 'В зимний период, во время такого сезона, многие из нас сталкиваются с проблемой сухой кожи, насморка, першения в горле, кашля и покраснения лица, особенно у детей. Температура воздуха в отапливаемых',
-        timestamp: Date.now(),
-      },
-    ],
-  },
-  {
-    dateStarted: Date.now(),
-    lastUpdated: Date.now(),
-    id: '2',
-    isWaitingForAssistantResponse: true,
-    history: [
-      {
-        id: '3',
-        isAssistant: false,
-        isUser: true,
-        text: 'Болит зуб сверху посередине',
-        timestamp: Date.now(),
-        userId: '1',
-      },
-    ],
-  },
-]
+import { useAppDispatch, useAppSelector } from '@store/index'
+import { fetchChats, getChats } from '@store/chats'
 
 const HeaderContainer = styled.View({
   display: 'flex',
@@ -97,19 +53,16 @@ const HeaderTitleContainer = styled.View({
 const AssistantScreen: React.FC<
   BottomTabNavigationProps<'AssistantScreen'>
 > = ({ navigation }) => {
-  const handleCreateChat = () => {
-    console.log(chats)
-    navigation.push('AssistantChatScreen', {
-      chatId: null,
-    })
-  }
-
-  const chats = useAppSelector(getChats)
   const dispatch = useAppDispatch()
+  const chats = useAppSelector(getChats)
 
   useEffect(() => {
     dispatch(fetchChats())
   }, [dispatch])
+
+  const handleCreateChat = () => {
+    navigation.push('AssistantChatScreen', { create: false })
+  }
 
   return (
     <Screen>

@@ -3,7 +3,9 @@ import { db } from '@utils/db'
 import { Chat } from 'src/types/Chat'
 import { FetchingState } from 'src/types/FetchingState'
 import { AuthState } from './auth'
-import { ChatMessage } from 'src/types/ChatMessage'
+import { ChatMessage, UserChatMessage } from 'src/types/ChatMessage'
+import { firestore } from '@config/firebase'
+import { addDoc, collection } from 'firebase/firestore'
 
 interface ChatsState {
   data: Chat[]
@@ -32,8 +34,7 @@ export const fetchChats = createAsyncThunk<
   }
 
   if (!user) {
-    console.warn('fetchChats: No user')
-    return []
+    throw new Error('User is not authenticated')
   }
 
   const docs = await db.chats(user.id)
@@ -46,6 +47,7 @@ export const fetchChats = createAsyncThunk<
 
   for (const chat of res) {
     const history: ChatMessage[] = []
+    // eslint-disable-next-line no-await-in-loop
     const historyDocs = await db.chatMessages(user.id, chat.id)
 
     historyDocs.forEach((historyDoc) => {
@@ -59,6 +61,91 @@ export const fetchChats = createAsyncThunk<
   return res
 })
 
+type SuccessFN = (id: string) => void
+
+export const sendMessage = createAsyncThunk<
+  void,
+  { message: string; chatId: string },
+  { state: { chats: ChatsState; auth: AuthState } }
+>('chats/get', async ({ message, chatId }, { getState, dispatch }) => {
+  const { user } = getState().auth
+
+  if (!user) {
+    throw new Error('User is not authenticated')
+  }
+
+  const messageData: Omit<UserChatMessage, 'id'> = {
+    isAssistant: false,
+    isUser: true,
+    userId: user.id,
+    text: message,
+    chatId,
+    timestamp: Date.now(),
+  }
+
+  const chatRef = collection(
+    firestore,
+    'users',
+    user.id,
+    'chats',
+    chatId,
+    'history'
+  )
+  const userMessageDoc = await addDoc(chatRef, messageData)
+
+  dispatch(
+    addChatMessage({
+      ...messageData,
+      id: userMessageDoc.id,
+      chatId,
+    })
+  )
+
+  const assistantMessageDoc = await addDoc(chatRef, messageData)
+
+  dispatch(
+    addChatMessage({
+      isAssistant: true,
+      isUser: false,
+      text: 'I RESPOND TO THEE',
+      timestamp: Date.now(),
+      id: assistantMessageDoc.id,
+      chatId: chatId,
+    })
+  )
+})
+
+export const createChat = createAsyncThunk<
+  void,
+  { message: string; successCallback: SuccessFN },
+  { state: { chats: ChatsState; auth: AuthState } }
+>('chats/get', async ({ message, successCallback }, { getState, dispatch }) => {
+  const { user } = getState().auth
+  if (!user) {
+    throw new Error('User is not authenticated')
+  }
+
+  const chatData: Omit<Chat, 'id'> = {
+    dateStarted: Date.now(),
+    lastUpdated: Date.now(),
+    isWaitingForAssistantResponse: false,
+    history: [],
+  }
+  const userRef = collection(firestore, 'users', user.id, 'chats')
+  const chatDoc = await addDoc(userRef, chatData)
+
+  await dispatch(
+    addChat({
+      ...chatData,
+      id: chatDoc.id,
+      history: [],
+    })
+  )
+
+  dispatch(sendMessage({ message, chatId: chatDoc.id }))
+  successCallback(chatDoc.id)
+})
+
 const slice = createSlice({
   name: 'chats',
   initialState,
@@ -70,7 +157,9 @@ const slice = createSlice({
       state.data = [...state.data, payload]
     },
     addChatMessage(state, { payload }: PayloadAction<ChatMessage>) {
-      state.data.find((c) => c.id === payload.chatId).history.push(payload)
+      console.log(payload)
+      const chat = state.data.find((chat) => chat.id === payload.chatId)
+      chat?.history.push(payload)
       state.data = [...state.data]
     },
   },

@@ -2,16 +2,17 @@ type BaseChatMessage = {
   id: string
   text: string
   timestamp: number
+  chatId: string
 }
 
 type AssistantChatMessage = BaseChatMessage & {
-  isAssistant: true
-  isUser: false
+  isAssistant: boolean
+  isUser: boolean
 }
 
-type UserChatMessage = BaseChatMessage & {
-  isAssistant: false
-  isUser: true
+export type UserChatMessage = BaseChatMessage & {
+  isAssistant: boolean
+  isUser: boolean
   userId: string
 }
 
