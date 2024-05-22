@@ -3,7 +3,7 @@ import { db } from '@utils/db'
 import { Chat } from 'src/types/Chat'
 import { FetchingState } from 'src/types/FetchingState'
 import { AuthState } from './auth'
-import {ChatMessage} from "src/types/ChatMessage";
+import { ChatMessage } from 'src/types/ChatMessage'
 
 interface ChatsState {
   data: Chat[]
@@ -44,13 +44,13 @@ export const fetchChats = createAsyncThunk<
     res.push({ ...data, id: doc.id })
   })
 
-  for (let chat of res) {
+  for (const chat of res) {
     const history: ChatMessage[] = []
     const historyDocs = await db.chatMessages(user.id, chat.id)
 
     historyDocs.forEach((historyDoc) => {
       const historyData = historyDoc.data()
-      history.push({...historyData, id: historyDoc.id})
+      history.push({ ...historyData, id: historyDoc.id })
     })
 
     chat.history = history
@@ -70,9 +70,7 @@ const slice = createSlice({
       state.data = [...state.data, payload]
     },
     addChatMessage(state, { payload }: PayloadAction<ChatMessage>) {
-      console.log(payload)
-      state.data.find(c => c.id === payload.chatId).history.push(payload)
-      console.log(state.data.find(c => c.id === payload.chatId).history.length)
+      state.data.find((c) => c.id === payload.chatId).history.push(payload)
       state.data = [...state.data]
     },
   },
@@ -106,7 +104,6 @@ const slice = createSlice({
 
 export const { setChats, addChat, addChatMessage } = slice.actions
 
-export const getChats = ({ chats }: { chats: ChatsState }) =>
-  chats.data
+export const getChats = ({ chats }: { chats: ChatsState }) => chats.data
 
 export default slice.reducer
