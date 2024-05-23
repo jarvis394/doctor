@@ -56,7 +56,7 @@ export const fetchChats = createAsyncThunk<
       history.push({ ...historyData, id: historyDoc.id })
     })
 
-    chat.history = history
+    chat.history = history.sort((a, b) => a.timestamp - b.timestamp)
   }
 
   return res
@@ -102,10 +102,8 @@ export const sendMessage = createAsyncThunk<
     })
   )
 
-  const assistantMessageDoc = await addDoc(chatRef, messageData)
-
   const question = `
-  Hello! Act as a dentist app AI-helper. Answer only to questions, related to dentist theme. On other questions politely refuse to respond.
+  Hello! Act as a dentist app AI-helper. Answer only to questions, related to dentist theme. On other questions politely refuse to respond. Respond in the language question is asked.
   Now provide me only answer to this question: 
   ${message}
   `
@@ -124,17 +122,19 @@ export const sendMessage = createAsyncThunk<
       }
   )
 
-  console.log(result)
-  const assistantMessage = result.data.choices[0].message.content
+  const assistantMessageData: Omit<ChatMessage, 'id'> = {
+    isAssistant: true,
+    isUser: false,
+    text: result.data.choices[0].message.content,
+    timestamp: Date.now(),
+    chatId: chatId,
+  }
+  const assistantMessageDoc = await addDoc(chatRef, assistantMessageData)
 
   dispatch(
     addChatMessage({
-      isAssistant: true,
-      isUser: false,
-      text: assistantMessage,
-      timestamp: Date.now(),
-      id: assistantMessageDoc.id,
-      chatId: chatId,
+      ...assistantMessageData,
+      id: assistantMessageDoc.id
     })
   )
 })
