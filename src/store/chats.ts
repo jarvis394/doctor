@@ -6,6 +6,7 @@ import { AuthState } from './auth'
 import { ChatMessage, UserChatMessage } from 'src/types/ChatMessage'
 import { firestore } from '@config/firebase'
 import { addDoc, collection } from 'firebase/firestore'
+import axios from 'axios'
 
 interface ChatsState {
   data: Chat[]
@@ -103,11 +104,34 @@ export const sendMessage = createAsyncThunk<
 
   const assistantMessageDoc = await addDoc(chatRef, messageData)
 
+  const question = `
+  Hello! Act as a dentist app AI-helper. Answer only to questions, related to dentist theme. On other questions politely refuse to respond.
+  Now provide me only answer to this question: 
+  ${message}
+  `
+
+  const result = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: question }],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENAI_SECRET}`,
+        },
+      }
+  )
+
+  console.log(result)
+  const assistantMessage = result.data.choices[0].message.content
+
   dispatch(
     addChatMessage({
       isAssistant: true,
       isUser: false,
-      text: 'I RESPOND TO THEE',
+      text: assistantMessage,
       timestamp: Date.now(),
       id: assistantMessageDoc.id,
       chatId: chatId,

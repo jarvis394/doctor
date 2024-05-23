@@ -30,8 +30,6 @@ const AssistantChatScreen: React.FC<
     setMessage(text)
   }
 
-  console.log(chat)
-
   const messageSent = async () => {
     setMessage('')
     if (!chat) {
