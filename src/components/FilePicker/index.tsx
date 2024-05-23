@@ -10,15 +10,16 @@ const Root = styled.ScrollView({
   display: 'flex',
   gap: 10,
   paddingHorizontal: 16,
+  paddingTop: 20,
 })
 
 const FileCardContainer = styled.View({
-  marginRight: 8,
+  marginRight: 14,
 })
 
 const AddFileCard = styled(TouchableRipple)(({ theme }) => ({
   backgroundColor: tinycolor(theme.colors.primary).setAlpha(0.24).toRgbString(),
-  marginRight: 8,
+  marginRight: 14,
   width: 116,
   height: 116,
   display: 'flex',
@@ -27,12 +28,18 @@ const AddFileCard = styled(TouchableRipple)(({ theme }) => ({
   borderRadius: 28,
 }))
 
-const FilePickerUnmemoized: React.FC = () => {
+type FilePickerUnmemoizedProps = {
+  isEditing: boolean
+}
+
+const FilePickerUnmemoized: React.FC<FilePickerUnmemoizedProps> = ({
+  isEditing,
+}) => {
   const theme = useAdaptiveTheme()
 
   return (
     <Root horizontal showsHorizontalScrollIndicator={false}>
-      <AddFileCard borderless onPress={() => console.log('press')}>
+      <AddFileCard borderless onPress={() => console.log('press add')}>
         <MaterialIcons
           color={theme.colors.text}
           name="add-circle-outline"
@@ -40,19 +47,19 @@ const FilePickerUnmemoized: React.FC = () => {
         />
       </AddFileCard>
       <FileCardContainer>
-        <FileCard />
+        <FileCard isEditing={isEditing} />
       </FileCardContainer>
       <FileCardContainer>
-        <FileCard />
+        <FileCard isEditing={isEditing} />
       </FileCardContainer>
       <FileCardContainer>
-        <FileCard />
+        <FileCard isEditing={isEditing} />
       </FileCardContainer>
       <FileCardContainer>
-        <FileCard />
+        <FileCard isEditing={isEditing} />
       </FileCardContainer>
       <FileCardContainer>
-        <FileCard />
+        <FileCard isEditing={isEditing} />
       </FileCardContainer>
     </Root>
   )

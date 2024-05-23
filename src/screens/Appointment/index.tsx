@@ -64,9 +64,15 @@ const AppointmentScreen: React.FC<
   const formattedTime = dayjs(appointment?.time).format('D MMMM, YYYY HH:mm')
   const [isEditingComment, setIsEditingComment] = useState(false)
   const [comment, setComment] = useState(appointment?.comment || '')
+  const [files, setFiles] = useState(appointment?.files || [])
+  const [isEditingFiles, setIsEditingFiles] = useState(false)
 
   const handleCommentEdit = () => {
     setIsEditingComment((prev) => !prev)
+  }
+
+  const handleFilesEdit = () => {
+    setIsEditingFiles((prev) => !prev)
   }
 
   const handleEditAppointment = () => {
@@ -145,13 +151,10 @@ const AppointmentScreen: React.FC<
         </Button>
       </Section>
       <Section contentProps={{ style: { paddingHorizontal: 0 } }} title="Файлы">
-        <FilePicker />
+        <FilePicker isEditing={isEditingFiles} />
       </Section>
       <View style={{ paddingHorizontal: 16, gap: 12, display: 'flex' }}>
-        <Button
-          mode="contained-tonal"
-          onPress={() => console.log('Edit files')}
-        >
+        <Button mode="contained-tonal" onPress={handleFilesEdit}>
           Редактировать файлы
         </Button>
         <Button mode="text" onPress={handleEditAppointment}>

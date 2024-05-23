@@ -40,7 +40,13 @@ const SecondaryText = styled(Text)({
   width: '100%',
 })
 
-const FileCardUnmemoized: React.FC = () => {
+type FileCardUnmemoizedProps = {
+  isEditing: boolean
+}
+
+const FileCardUnmemoized: React.FC<FileCardUnmemoizedProps> = ({
+  isEditing,
+}) => {
   const theme = useAdaptiveTheme()
 
   return (
@@ -51,9 +57,11 @@ const FileCardUnmemoized: React.FC = () => {
           VeryLongFileNameDocument.xml
         </SecondaryText>
       </Content>
-      {/* <DeleteIconWrapper onPress={() => console.log('press')} borderless>
-        <MaterialIcons color="#EA4335" name="close" size={24} />
-      </DeleteIconWrapper> */}
+      {isEditing && (
+        <DeleteIconWrapper onPress={() => console.log('press')} borderless>
+          <MaterialIcons color="#EA4335" name="close" size={24} />
+        </DeleteIconWrapper>
+      )}
     </Root>
   )
 }
