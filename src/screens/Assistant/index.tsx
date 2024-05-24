@@ -5,8 +5,8 @@ import Section from '@components/Section'
 import Stars from '@components/svg/Stars'
 import styled from '@emotion/native'
 import { BottomTabNavigationProps } from '@routes/app.routes'
-import React, { useEffect } from 'react'
-import { Text } from 'react-native-paper'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Text } from 'react-native-paper'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useAppDispatch, useAppSelector } from '@store/index'
 import { fetchChats, getChats } from '@store/chats'
@@ -55,9 +55,11 @@ const AssistantScreen: React.FC<
 > = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const chats = useAppSelector(getChats)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    dispatch(fetchChats())
+    setLoading(true)
+    dispatch(fetchChats(() => {setLoading(false)}))
   }, [dispatch])
 
   const handleCreateChat = () => {
@@ -81,6 +83,7 @@ const AssistantScreen: React.FC<
         >
           Создать чат
         </Button>
+        {loading && <ActivityIndicator animating={true} />}
         {chats.map((chat) => (
           <ChatCard key={chat.id} chat={chat} />
         ))}

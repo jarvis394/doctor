@@ -22,11 +22,13 @@ const initialState: ChatsState = {
   fetchError: null,
 }
 
+type FetchChatsSuccessFN = () => void
+
 export const fetchChats = createAsyncThunk<
   Chat[],
-  void,
+  { successCallback: FetchChatsSuccessFN },
   { state: { chats: ChatsState; auth: AuthState } }
->('chats/get', async (_, { getState, requestId }) => {
+>('chats/get', async (successCallback, { getState, requestId }) => {
   const { user } = getState().auth
   const { state, currentRequestId } = getState().chats
 
@@ -59,7 +61,9 @@ export const fetchChats = createAsyncThunk<
     chat.history = history.sort((a, b) => a.timestamp - b.timestamp)
   }
 
-  return res
+  const sorted = res.sort((a, b) => b.dateStarted - a.dateStarted)
+  successCallback()
+  return sorted
 })
 
 type SuccessFN = (id: string) => void
@@ -178,10 +182,9 @@ const slice = createSlice({
       state.data = payload
     },
     addChat(state, { payload }: PayloadAction<Chat>) {
-      state.data = [...state.data, payload]
+      state.data.unshift(payload)
     },
     addChatMessage(state, { payload }: PayloadAction<ChatMessage>) {
-      console.log(payload)
       const chat = state.data.find((chat) => chat.id === payload.chatId)
       chat?.history.push(payload)
       state.data = [...state.data]
