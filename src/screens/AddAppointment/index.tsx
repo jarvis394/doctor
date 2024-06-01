@@ -100,7 +100,7 @@ const AddAppointmentScreen: React.FC<
       dispatch(createAppointment(getCurrentAppointmetState()))
     }
 
-    navigation.popToTop()
+    navigation.pop()
   }
 
   const handleSelectDoctor = () => {

@@ -113,7 +113,7 @@ const ChatCardUnmemoized: React.FC<ChatCardProps> = ({ chat }) => {
   }, [chat.history])
 
   const handlePress = () => {
-    navigation.push('AssistantChatScreen', { id: '1' })
+    navigation.push('AssistantChatScreen', { chatId: chat.id })
   }
 
   return (
