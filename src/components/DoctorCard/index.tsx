@@ -143,6 +143,7 @@ const DoctorCardUnmemoized: React.FC<DoctorCardProps> = ({
   }
 
   if (!doctor) return
+  console.log(doctor)
 
   return (
     <Root borderless onPress={handlePress}>
